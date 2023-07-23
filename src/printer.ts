@@ -156,20 +156,23 @@ interface FormatDelegatePrettierOptions {
 /**
  * Supported parsers for the `formatDelegatePrettier` function.
  */
-type FormatDelegatePrettierSupportedParser = keyof Pick<
-  typeof AngularParsers &
-    typeof BabelParsers &
-    typeof HtmlParsers &
-    typeof PostCssParsers,
-  | 'css'
-  | 'vue'
-  | '__vue_event_binding'
-  | '__vue_expression'
-  | '__js_expression'
-  | '__ng_binding'
-  | '__ng_action'
-  | '__ng_directive'
->;
+type FormatDelegatePrettierSupportedParser =
+  | keyof Pick<
+      typeof AngularParsers &
+        typeof BabelParsers &
+        typeof HtmlParsers &
+        typeof PostCssParsers,
+      | 'css'
+      | 'vue'
+      | '__vue_event_binding'
+      | '__vue_expression'
+      | '__js_expression'
+      | '__ng_binding'
+      | '__ng_action'
+      | '__ng_directive'
+    >
+  | '__vue_ts_event_binding'
+  | '__vue_ts_expression';
 
 /**
  * The printer class.
@@ -675,13 +678,31 @@ export class PugPrinter {
   }
 
   private formatVueEventBinding(val: string): string {
-    return this.formatDelegatePrettier(val, '__vue_event_binding', {
+    try {
+      return this.formatDelegatePrettier(val, '__vue_event_binding', {
+        trimTrailingSemicolon: true,
+      });
+    } catch {
+      return this.formatVueTsEventBinding(val);
+    }
+  }
+
+  private formatVueTsEventBinding(val: string): string {
+    return this.formatDelegatePrettier(val, '__vue_ts_event_binding', {
       trimTrailingSemicolon: true,
     });
   }
 
   private formatVueExpression(val: string): string {
-    return this.formatDelegatePrettier(val, '__vue_expression');
+    try {
+      return this.formatDelegatePrettier(val, '__vue_expression');
+    } catch {
+      return this.formatVueTsExpression(val);
+    }
+  }
+
+  private formatVueTsExpression(val: string): string {
+    return this.formatDelegatePrettier(val, '__vue_ts_expression');
   }
 
   private formatAngularBinding(val: string): string {
