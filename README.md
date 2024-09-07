@@ -62,17 +62,34 @@ pnpm add --save-dev prettier @prettier/plugin-pug
 
 ## Usage
 
+### CLI
+
 ```bash
-npx prettier --write "**/*.pug"
+npx prettier --write "**/*.pug" --plugin="@prettier/plugin-pug"
 # or
-yarn prettier --write "**/*.pug"
+yarn prettier --write "**/*.pug" --plugin="@prettier/plugin-pug"
 # or
-pnpm prettier --write "**/*.pug"
+pnpm prettier --write "**/*.pug" --plugin="@prettier/plugin-pug"
 ```
 
-## Configuration
+### Configuration file (.prettierrc)
 
-See [documentation](https://prettier.github.io/plugin-pug/guide)
+```json
+{
+  "plugins": ["@prettier/plugin-pug"]
+}
+```
+
+See [Standard Prettier overrides](https://prettier.github.io/plugin-pug/guide/standard-prettier-overrides.html) and [Pug specific options](https://prettier.github.io/plugin-pug/guide/pug-specific-options.html) for more options.
+
+### API
+
+```js
+await prettier.format('code', {
+  parser: 'pug',
+  plugins: ['@prettier/plugin-pug'],
+});
+```
 
 ## Workaround / Known Issue
 
@@ -116,9 +133,7 @@ If you’re interested in contributing to the development of Prettier for Pug, y
 To run `@prettier/plugin-pug` locally:
 
 - Clone this repository.
-- Execute `pnpm install`.
-- Execute `pnpm run lint` to make sure that the code passes formatting and linting.
-- Execute `pnpm run test` to make sure that TypeScript successfully compiles into JavaScript and all unit tests pass.
+- Execute `pnpm run preflight`.
 
 ## Credits
 

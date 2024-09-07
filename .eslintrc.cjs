@@ -2,6 +2,11 @@
 const { defineConfig } = require('eslint-define-config');
 const { readGitignoreFiles } = require('eslint-gitignore');
 
+/// <reference types="@eslint-types/jsdoc" />
+/// <reference types="@eslint-types/prettier" />
+/// <reference types="@eslint-types/typescript-eslint" />
+/// <reference types="@eslint-types/unicorn" />
+
 module.exports = defineConfig({
   ignorePatterns: [
     ...readGitignoreFiles(),
@@ -16,8 +21,9 @@ module.exports = defineConfig({
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'plugin:@typescript-eslint/recommended-type-checked',
     'plugin:prettier/recommended',
+    'plugin:unicorn/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -30,6 +36,7 @@ module.exports = defineConfig({
     'prettier',
     'spellcheck',
     'inclusive-language',
+    'unicorn',
   ],
   rules: {
     curly: ['error'],
@@ -44,6 +51,16 @@ module.exports = defineConfig({
     ],
     quotes: ['error', 'single', { avoidEscape: true }],
     semi: ['error', 'always'],
+
+    'unicorn/consistent-destructuring': 'off',
+    'unicorn/import-style': [
+      'error',
+      { styles: { 'node:path': { named: true } } },
+    ],
+    'unicorn/no-null': 'off',
+    'unicorn/no-useless-switch-case': 'off',
+    'unicorn/prefer-string-raw': 'off',
+    'unicorn/prevent-abbreviations': 'off',
 
     '@typescript-eslint/array-type': [
       'warn',
@@ -178,7 +195,7 @@ module.exports = defineConfig({
     {
       files: ['src/**/*.ts'],
       plugins: ['jsdoc'],
-      extends: ['plugin:jsdoc/recommended'],
+      extends: ['plugin:jsdoc/recommended-typescript-error'],
       rules: {
         'jsdoc/match-description': [
           'warn',
